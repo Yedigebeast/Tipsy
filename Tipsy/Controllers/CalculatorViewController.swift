@@ -21,32 +21,21 @@ class CalculatorViewController: UIViewController {
         super.viewDidLoad()
        
     }
+    
+    var calculatorBrain = CalculatorBrain()
 
-    @IBAction func numberTexted(_ sender: UITextField) {
-    
-        
-        
-    }
-    
-    
     @IBAction func tipChanged(_ sender: UIButton) {
         
         billTextField.endEditing(true)
         
-        if sender.currentTitle! == "0%" {
-            zeroPercentButton.isSelected = true
-            tenPercentButton.isSelected = false
-            twentyPercentButton.isSelected = false
-        } else if sender.currentTitle! == "10%" {
-            zeroPercentButton.isSelected = false
-            tenPercentButton.isSelected = true
-            twentyPercentButton.isSelected = false
-        } else {
-            zeroPercentButton.isSelected = false
-            tenPercentButton.isSelected = false
-            twentyPercentButton.isSelected = true
-        }
+        var tipPercentSelected: [Bool] = [false, false, false]
+        
+        tipPercentSelected = calculatorBrain.getPercentButton(tipSelected: sender.currentTitle!)
                 
+        zeroPercentButton.isSelected = tipPercentSelected[0]
+        tenPercentButton.isSelected = tipPercentSelected[1]
+        twentyPercentButton.isSelected = tipPercentSelected[2]
+        
     }
     
     
@@ -62,6 +51,16 @@ class CalculatorViewController: UIViewController {
             
             let destinationVC = segue.destination as! ResultsViewController
             destinationVC.answer = String(format: "%.2f", totalAmountOfMoney!)
+            
+            if zeroPercentButton.isSelected == true{
+                destinationVC.tip = 0
+            }else if tenPercentButton.isSelected == true {
+                destinationVC.tip = 10
+            }else{
+                destinationVC.tip = 20
+            }
+            
+            destinationVC.numberOfpeople = Int(splitNumberLabel.text!)
             
         }
         
